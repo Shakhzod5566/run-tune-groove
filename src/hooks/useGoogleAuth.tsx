@@ -1,7 +1,5 @@
 
 import { useState, useEffect } from 'react';
-import { GoogleAuth } from '@capacitor/google-auth';
-import { Capacitor } from '@capacitor/core';
 
 interface GoogleUser {
   id: string;
@@ -16,31 +14,51 @@ export const useGoogleAuth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (Capacitor.isNativePlatform()) {
-      GoogleAuth.initialize();
-    }
-  }, []);
+  // Проверяем, загружен ли Google API
+  const isGoogleAPILoaded = () => {
+    return typeof window !== 'undefined' && window.google && window.google.accounts;
+  };
 
   const signIn = async () => {
     try {
       setIsLoading(true);
       setError(null);
       
-      const result = await GoogleAuth.signIn();
+      if (!isGoogleAPILoaded()) {
+        throw new Error('Google API не загружен');
+      }
+
+      // Инициализируем Google Sign-In
+      const client = window.google.accounts.oauth2.initTokenClient({
+        client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
+        scope: 'profile email https://www.googleapis.com/auth/youtube.readonly',
+        callback: (response: any) => {
+          if (response.access_token) {
+            // Получаем информацию о пользователе
+            fetch(`https://www.googleapis.com/oauth2/v2/userinfo?access_token=${response.access_token}`)
+              .then(res => res.json())
+              .then(userInfo => {
+                const googleUser: GoogleUser = {
+                  id: userInfo.id,
+                  email: userInfo.email,
+                  name: userInfo.name,
+                  imageUrl: userInfo.picture,
+                  accessToken: response.access_token
+                };
+                
+                setUser(googleUser);
+                localStorage.setItem('googleUser', JSON.stringify(googleUser));
+              })
+              .catch(err => {
+                setError('Ошибка получения данных пользователя');
+                console.error(err);
+              });
+          }
+        },
+      });
+
+      client.requestAccessToken();
       
-      const googleUser: GoogleUser = {
-        id: result.id,
-        email: result.email,
-        name: result.name,
-        imageUrl: result.imageUrl,
-        accessToken: result.accessToken
-      };
-      
-      setUser(googleUser);
-      localStorage.setItem('googleUser', JSON.stringify(googleUser));
-      
-      return googleUser;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Ошибка авторизации';
       setError(errorMessage);
@@ -53,7 +71,9 @@ export const useGoogleAuth = () => {
   const signOut = async () => {
     try {
       setIsLoading(true);
-      await GoogleAuth.signOut();
+      if (user?.accessToken && isGoogleAPILoaded()) {
+        window.google.accounts.oauth2.revoke(user.accessToken);
+      }
       setUser(null);
       localStorage.removeItem('googleUser');
     } catch (err) {

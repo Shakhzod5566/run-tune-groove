@@ -1,64 +1,31 @@
 
-<!DOCTYPE html>
-<html lang="ru">
+<!doctype html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RunTune Groove - Музыка для пробежки</title>
-    <meta name="description" content="Приложение для подбора музыки во время пробежки с анализом тренировок" />
-    <meta name="author" content="RunTune Team" />
-    <meta name="keywords" content="пробежка, музыка, тренировки, фитнес, плейлисты" />
-
+    <title>RunTune Groove</title>
+    <meta name="description" content="Музыкальное приложение для бега с синхронизацией YouTube плейлистов" />
+    <meta name="keywords" content="бег, музыка, плейлисты, тренировки, фитнес" />
+    
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#a855f7" />
-    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#ff6b35" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="RunTune" />
-    <meta name="application-name" content="RunTune" />
-
-    <!-- Manifest -->
-    <link rel="manifest" href="/manifest.json" />
-
+    <meta name="apple-mobile-web-app-title" content="RunTune Groove" />
+    
     <!-- Icons -->
-    <link rel="icon" href="/icon-192.png" type="image/png" />
     <link rel="apple-touch-icon" href="/icon-192.png" />
-
-    <!-- Open Graph -->
-    <meta property="og:title" content="RunTune Groove - Музыка для пробежки" />
-    <meta property="og:description" content="Приложение для подбора музыки во время пробежки с анализом тренировок" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="/icon-512.png" />
-    <meta property="og:url" content="https://ea5b061e-1ac3-46fe-bc42-707cd81651d1.lovableproject.com" />
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="RunTune Groove - Музыка для пробежки" />
-    <meta name="twitter:description" content="Приложение для подбора музыки во время пробежки с анализом тренировок" />
-    <meta name="twitter:image" content="/icon-512.png" />
-
-    <!-- Preload critical resources -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
+    
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
-
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    
-    <!-- Service Worker Registration -->
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then((registration) => {
-              console.log('SW registered: ', registration);
-            })
-            .catch((registrationError) => {
-              console.log('SW registration failed: ', registrationError);
-            });
-        });
-      }
-    </script>
   </body>
 </html>
