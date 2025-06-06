@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Header } from '@/components/Header';
 import { MusicPlayer } from '@/components/MusicPlayer';
@@ -9,6 +8,8 @@ import { RunAnalytics } from '@/components/RunAnalytics';
 import { InstallPrompt } from '@/components/InstallPrompt';
 import { OfflineIndicator } from '@/components/OfflineIndicator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { GoogleAuth } from '@/components/GoogleAuth';
+import { YouTubePlaylists } from '@/components/YouTubePlaylists';
 
 const playlists = [
   {
@@ -61,6 +62,12 @@ const Index = () => {
             className="data-[state=active]:bg-run-orange data-[state=active]:text-white text-white/70 hover:text-white transition-all"
           >
             Музыка
+          </TabsTrigger>
+          <TabsTrigger 
+            value="youtube" 
+            className="data-[state=active]:bg-run-orange data-[state=active]:text-white text-white/70 hover:text-white transition-all"
+          >
+            YouTube
           </TabsTrigger>
           <TabsTrigger 
             value="calendar" 
@@ -134,6 +141,21 @@ const Index = () => {
                     ))}
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="youtube" className="mt-0">
+          <div className="grid lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <YouTubePlaylists />
+            </div>
+            
+            <div className="lg:col-span-1">
+              <div className="sticky top-4 space-y-6">
+                <GoogleAuth />
+                <MusicPlayer />
               </div>
             </div>
           </div>
