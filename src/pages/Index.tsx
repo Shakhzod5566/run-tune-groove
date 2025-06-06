@@ -6,6 +6,8 @@ import { PlaylistCard } from '@/components/PlaylistCard';
 import { RunCalendar } from '@/components/RunCalendar';
 import { SongHistory } from '@/components/SongHistory';
 import { RunAnalytics } from '@/components/RunAnalytics';
+import { InstallPrompt } from '@/components/InstallPrompt';
+import { OfflineIndicator } from '@/components/OfflineIndicator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const playlists = [
@@ -49,6 +51,8 @@ const Index = () => {
   return (
     <div className="min-h-screen p-4 max-w-7xl mx-auto">
       <Header />
+      <OfflineIndicator />
+      <InstallPrompt />
       
       <Tabs defaultValue="music" className="w-full">
         <TabsList className="glass-effect border-none mb-8 p-1">
