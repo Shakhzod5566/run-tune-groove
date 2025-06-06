@@ -3,6 +3,10 @@ import React, { useState } from 'react';
 import { Header } from '@/components/Header';
 import { MusicPlayer } from '@/components/MusicPlayer';
 import { PlaylistCard } from '@/components/PlaylistCard';
+import { RunCalendar } from '@/components/RunCalendar';
+import { SongHistory } from '@/components/SongHistory';
+import { RunAnalytics } from '@/components/RunAnalytics';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const playlists = [
   {
@@ -36,22 +40,6 @@ const playlists = [
     trackCount: 20,
     duration: "1ч 25м",
     category: "HIIT"
-  },
-  {
-    id: 5,
-    title: "Восстановление",
-    description: "Спокойные треки для легких пробежек",
-    trackCount: 15,
-    duration: "58м",
-    category: "Восстановление"
-  },
-  {
-    id: 6,
-    title: "Вечерний бег",
-    description: "Атмосферная музыка для вечерних пробежек",
-    trackCount: 22,
-    duration: "1ч 35м",
-    category: "Вечер"
   }
 ];
 
@@ -59,68 +47,112 @@ const Index = () => {
   const [selectedPlaylist, setSelectedPlaylist] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen p-4 max-w-6xl mx-auto">
+    <div className="min-h-screen p-4 max-w-7xl mx-auto">
       <Header />
       
-      <div className="grid lg:grid-cols-3 gap-8">
-        {/* Main content */}
-        <div className="lg:col-span-2">
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-white mb-6">Плейлисты для бега</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              {playlists.map((playlist) => (
-                <PlaylistCard
-                  key={playlist.id}
-                  playlist={playlist}
-                  onClick={() => setSelectedPlaylist(playlist.id)}
-                />
-              ))}
+      <Tabs defaultValue="music" className="w-full">
+        <TabsList className="glass-effect border-none mb-8 p-1">
+          <TabsTrigger 
+            value="music" 
+            className="data-[state=active]:bg-run-orange data-[state=active]:text-white text-white/70 hover:text-white transition-all"
+          >
+            Музыка
+          </TabsTrigger>
+          <TabsTrigger 
+            value="calendar" 
+            className="data-[state=active]:bg-run-orange data-[state=active]:text-white text-white/70 hover:text-white transition-all"
+          >
+            Календарь
+          </TabsTrigger>
+          <TabsTrigger 
+            value="history" 
+            className="data-[state=active]:bg-run-orange data-[state=active]:text-white text-white/70 hover:text-white transition-all"
+          >
+            История
+          </TabsTrigger>
+          <TabsTrigger 
+            value="analytics" 
+            className="data-[state=active]:bg-run-orange data-[state=active]:text-white text-white/70 hover:text-white transition-all"
+          >
+            Анализ
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="music" className="mt-0">
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Main content */}
+            <div className="lg:col-span-2">
+              <div className="mb-8">
+                <h2 className="text-2xl font-bold text-white mb-6">Плейлисты для бега</h2>
+                <div className="grid md:grid-cols-2 gap-6">
+                  {playlists.map((playlist, index) => (
+                    <div
+                      key={playlist.id}
+                      className="animate-fade-in"
+                      style={{ animationDelay: `${index * 0.1}s` }}
+                    >
+                      <PlaylistCard
+                        playlist={playlist}
+                        onClick={() => setSelectedPlaylist(playlist.id)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        
-        {/* Music player sidebar */}
-        <div className="lg:col-span-1">
-          <div className="sticky top-4">
-            <MusicPlayer />
             
-            <div className="mt-6 glass-effect rounded-2xl p-6 text-white">
-              <h3 className="text-lg font-bold mb-4">Рекомендации</h3>
-              <div className="space-y-3">
-                <div className="p-3 rounded-lg bg-white/10 hover:bg-white/20 transition-colors cursor-pointer">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <div className="font-medium">Energy Boost</div>
-                      <div className="text-sm text-white/70">Electronic Mix</div>
-                    </div>
-                    <div className="text-run-orange text-sm font-medium">130 BPM</div>
-                  </div>
-                </div>
+            {/* Music player sidebar */}
+            <div className="lg:col-span-1">
+              <div className="sticky top-4 space-y-6">
+                <MusicPlayer />
                 
-                <div className="p-3 rounded-lg bg-white/10 hover:bg-white/20 transition-colors cursor-pointer">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <div className="font-medium">Running High</div>
-                      <div className="text-sm text-white/70">Pop Hits</div>
-                    </div>
-                    <div className="text-run-orange text-sm font-medium">125 BPM</div>
-                  </div>
-                </div>
-                
-                <div className="p-3 rounded-lg bg-white/10 hover:bg-white/20 transition-colors cursor-pointer">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <div className="font-medium">Power Run</div>
-                      <div className="text-sm text-white/70">Rock Anthems</div>
-                    </div>
-                    <div className="text-run-orange text-sm font-medium">135 BPM</div>
+                <div className="glass-effect rounded-2xl p-6 text-white">
+                  <h3 className="text-lg font-bold mb-4">Рекомендации</h3>
+                  <div className="space-y-3">
+                    {[
+                      { name: "Energy Boost", genre: "Electronic Mix", bpm: 130 },
+                      { name: "Running High", genre: "Pop Hits", bpm: 125 },
+                      { name: "Power Run", genre: "Rock Anthems", bpm: 135 }
+                    ].map((track, index) => (
+                      <div 
+                        key={track.name}
+                        className="p-3 rounded-lg bg-white/10 hover:bg-white/20 transition-all duration-300 cursor-pointer hover:scale-[1.02] animate-fade-in"
+                        style={{ animationDelay: `${(index + 1) * 0.1}s` }}
+                      >
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <div className="font-medium">{track.name}</div>
+                            <div className="text-sm text-white/70">{track.genre}</div>
+                          </div>
+                          <div className="text-run-orange text-sm font-medium">{track.bpm} BPM</div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </TabsContent>
+
+        <TabsContent value="calendar" className="mt-0">
+          <div className="grid lg:grid-cols-2 gap-8">
+            <RunCalendar />
+            <RunAnalytics />
+          </div>
+        </TabsContent>
+
+        <TabsContent value="history" className="mt-0">
+          <div className="grid lg:grid-cols-2 gap-8">
+            <SongHistory />
+            <RunAnalytics />
+          </div>
+        </TabsContent>
+
+        <TabsContent value="analytics" className="mt-0">
+          <RunAnalytics />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
